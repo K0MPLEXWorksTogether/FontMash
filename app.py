@@ -2,6 +2,7 @@
 
 import asyncio
 from websockets.asyncio.server import serve
+from utils.logger import Logger
 
 from services.font import FontService
 from sockets.broadcaster import Broadcaster
@@ -12,6 +13,7 @@ async def main() -> None:
     font_service = await FontService.create("font_leaderboard")
     broadcaster = Broadcaster()
     handler = Handler(font_service, broadcaster)
+    logger = Logger().get_logger()
 
     async with serve(handler, "localhost", 8765):
         logger.info('WebSocket running at ws://localhost:8765')

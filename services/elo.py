@@ -68,13 +68,3 @@ class ELOService:
 
         except Exception as err:
             self.logger.error(f"[elo] Failed to update ELO: {err}")
-
-if __name__ == "__main__":
-    async def main() -> None:
-        elo_service = await ELOService.create()
-        font_a = "JetBrains Mono"
-        font_b = "Fira Code"
-
-        await elo_service.update_elo(font_a, font_b, 1)
-
-    asyncio.run(main())

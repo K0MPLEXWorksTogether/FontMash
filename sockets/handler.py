@@ -7,8 +7,7 @@ from websockets import WebSocketServerProtocol
 from services.font import FontService
 from sockets.broadcaster import Broadcaster
 from utils.logger import Logger
-
-ELO_DELTA_K = 32.0
+from services.elo import ELOService
 
 
 class Handler:
@@ -16,6 +15,7 @@ class Handler:
         self.font_service = font_service
         self.broadcaster = broadcaster
         self.logger = Logger().get_logger()
+        self.elo = ELOService(font_service)
 
     async def __call__(self, websocket: WebSocketServerProtocol) -> None:
         await self.broadcaster.register(websocket)
@@ -34,12 +34,8 @@ class Handler:
                 if choice not in (1, 2):
                     continue
 
-                (font_a, elo_a), (font_b, elo_b) = matchup
-                winner = font_a if choice == 1 else font_b
-                loser = font_b if choice == 1 else font_a
-
-                await self.font_service.increment_elo(winner, ELO_DELTA_K)
-                await self.font_service.increment_elo(loser, -ELO_DELTA_K)
+                outcome = 1 if choice == 1 else 0
+                await self.elo.update_elo(matchup[0][0], matchup[1][0], outcome)
 
                 leaderboard = await self.font_service.leaderboard(0, 9)
                 await self.broadcaster.broadcast({

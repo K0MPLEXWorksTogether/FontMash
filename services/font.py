@@ -132,12 +132,3 @@ class FontService:
                 f"[fonts] Uncaught exception while fetching leaderboard: {err}"
             )
             return []
-
-
-if __name__ == "__main__":
-    async def main():
-        font_service = await FontService.create("font_leaderboard")
-
-        head_on_head = await font_service.head_on_head()
-
-    asyncio.run(main())
