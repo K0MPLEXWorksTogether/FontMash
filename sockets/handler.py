@@ -2,7 +2,7 @@
 
 import json
 import asyncio
-from websockets import WebSocketServerProtocol
+from websockets import ServerConnection
 
 from services.font import FontService
 from sockets.broadcaster import Broadcaster
@@ -17,7 +17,7 @@ class Handler:
         self.logger = Logger().get_logger()
         self.elo = ELOService(font_service)
 
-    async def __call__(self, websocket: WebSocketServerProtocol) -> None:
+    async def __call__(self, websocket: ServerConnection) -> None:
         await self.broadcaster.register(websocket)
 
         try:

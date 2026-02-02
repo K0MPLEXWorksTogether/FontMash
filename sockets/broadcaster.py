@@ -3,21 +3,21 @@
 import json
 import asyncio
 from typing import Set
-from websockets import WebSocketServerProtocol
+from websockets import ServerConnection
 from utils.logger import Logger
 
 class Broadcaster:
     def __init__(self) -> None:
-        self.clients: Set[WebSocketServerProtocol] = set()
+        self.clients: Set[ServerConnection] = set()
         self.logger = Logger().get_logger()
 
-    async def register(self, websocket: WebSocketServerProtocol) -> None:
+    async def register(self, websocket: ServerConnection) -> None:
         try:
             self.clients.add(websocket)
         except Exception as err:
             self.logger.error(f"[broacaster] Could not register client: {err}")
 
-    async def unregister(self, websocket: WebSocketServerProtocol) -> None:
+    async def unregister(self, websocket: ServerConnection) -> None:
         try:
             self.clients.discard(websocket)
         except Exception as err:
