@@ -4,13 +4,14 @@ import logging
 import sys
 from datetime import datetime
 
+
 class ColorFormatter(logging.Formatter):
     COLORS = {
-        "DEBUG": "\033[36m",     
-        "INFO": "\033[32m",      
-        "WARNING": "\033[33m",   
-        "ERROR": "\033[31m",    
-        "CRITICAL": "\033[41m", 
+        "DEBUG": "\033[36m",
+        "INFO": "\033[32m",
+        "WARNING": "\033[33m",
+        "ERROR": "\033[31m",
+        "CRITICAL": "\033[41m",
     }
     RESET = "\033[0m"
 
@@ -49,6 +50,6 @@ class Logger:
         return self.logger
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logger = Logger().get_logger()
-    logger.info('Hello from logger!')
+    logger.info("Hello from logger!")

@@ -34,48 +34,36 @@ class FontService:
     async def add(self, font: str, elo: float) -> None:
         try:
             await self.client.zadd(self.key, {font: elo})
-            self.logger.info(
-                f"[fonts] Added font '{font}' with ELO {elo}"
-            )
+            self.logger.info(f"[fonts] Added font '{font}' with ELO {elo}")
         except Exception as err:
-            self.logger.error(
-                f"[fonts] Uncaught exception while adding {font}: {err}"
-            )
+            self.logger.error(f"[fonts] Uncaught exception while adding {font}: {err}")
 
     async def get_elo(self, font: str) -> Optional[float]:
         try:
             elo = await self.client.zscore(self.key, font)
-            self.logger.debug(
-                f"[fonts] Retrieved ELO for '{font}': {elo}"
-            )
+            self.logger.debug(f"[fonts] Retrieved ELO for '{font}': {elo}")
             return elo
         except Exception as err:
             self.logger.error(
                 f"[fonts] Uncaught exception while getting elo for {font}: {err}"
             )
             return None
-    
+
     async def head_on_head(self) -> List[Tuple[str, float]]:
         try:
             count = await self.client.zcard(self.key)
             if count < 2:
-                self.logger.warning(
-                    "[fonts] Not enough fonts for head-to-head"
-                )
+                self.logger.warning("[fonts] Not enough fonts for head-to-head")
                 return []
 
             i, j = random.sample(range(count), 2)
             results = []
             for idx in (i, j):
-                entry = await self.client.zrevrange(
-                    self.key, idx, idx, withscores=True
-                )
+                entry = await self.client.zrevrange(self.key, idx, idx, withscores=True)
                 if entry:
                     results.append(entry[0])
 
-            self.logger.debug(
-                f"[fonts] Head-to-head matchup: {results}"
-            )
+            self.logger.debug(f"[fonts] Head-to-head matchup: {results}")
             return results
         except Exception as err:
             self.logger.error(
@@ -86,9 +74,7 @@ class FontService:
     async def update_elo(self, font: str, new_elo: float) -> None:
         try:
             await self.client.zadd(self.key, {font: new_elo})
-            self.logger.info(
-                f"[fonts] Updated ELO for '{font}' → {new_elo}"
-            )
+            self.logger.info(f"[fonts] Updated ELO for '{font}' → {new_elo}")
         except Exception as err:
             self.logger.error(
                 f"[fonts] Uncaught exception while updating elo for {font}: {err}"
@@ -119,13 +105,9 @@ class FontService:
                     self.key, start, end, withscores=True
                 )
             else:
-                board = await self.client.zrange(
-                    self.key, start, end, withscores=True
-                )
+                board = await self.client.zrange(self.key, start, end, withscores=True)
 
-            self.logger.debug(
-                f"[fonts] Retrieved leaderboard entries {start}..{end}"
-            )
+            self.logger.debug(f"[fonts] Retrieved leaderboard entries {start}..{end}")
             return board
         except Exception as err:
             self.logger.error(

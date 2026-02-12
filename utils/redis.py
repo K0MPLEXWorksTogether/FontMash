@@ -42,5 +42,6 @@ async def connect_redis(host: str, password: str) -> Redis:
         await client.close()
         raise RedisConnectionError("[redis] Failed to connect to Redis") from err
 
-if __name__ == '__main__':
-    asyncio.run(connect_redis(os.getenv('REDIS_HOST'), os.getenv('REDIS_PASSWORD')))
+
+if __name__ == "__main__":
+    asyncio.run(connect_redis(os.getenv("REDIS_HOST"), os.getenv("REDIS_PASSWORD")))

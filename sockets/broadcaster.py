@@ -6,6 +6,7 @@ from typing import Set
 from websockets import ServerConnection
 from utils.logger import Logger
 
+
 class Broadcaster:
     def __init__(self) -> None:
         self.clients: Set[ServerConnection] = set()
@@ -31,7 +32,7 @@ class Broadcaster:
             payload = json.dumps(message)
             await asyncio.gather(
                 *[client.send(payload) for client in self.clients],
-                return_exceptions=True
+                return_exceptions=True,
             )
         except Exception as err:
             self.logger.error(f"[broacaster] Could not broadcast: {err}")

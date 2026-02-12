@@ -22,10 +22,7 @@ class Handler:
 
         try:
             matchup = await self.font_service.head_on_head()
-            await websocket.send(json.dumps({
-                "type": "matchup",
-                "fonts": matchup
-            }))
+            await websocket.send(json.dumps({"type": "matchup", "fonts": matchup}))
 
             async for message in websocket:
                 data = json.loads(message)
@@ -38,16 +35,22 @@ class Handler:
                 await self.elo.update_elo(matchup[0][0], matchup[1][0], outcome)
 
                 leaderboard = await self.font_service.leaderboard(0, 9)
-                await self.broadcaster.broadcast({
-                    "type": "leaderboard",
-                    "data": leaderboard,
-                })
+                await self.broadcaster.broadcast(
+                    {
+                        "type": "leaderboard",
+                        "data": leaderboard,
+                    }
+                )
 
                 matchup = await self.font_service.head_on_head()
-                await websocket.send(json.dumps({
-                    "type": "matchup",
-                    "fonts": matchup,
-                }))
+                await websocket.send(
+                    json.dumps(
+                        {
+                            "type": "matchup",
+                            "fonts": matchup,
+                        }
+                    )
+                )
         except Exception as err:
             self.logger.error(f"[handler]: Could not handle socket client: {err}")
         finally:

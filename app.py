@@ -18,7 +18,7 @@ async def main() -> None:
 
     PORT = int(os.getenv("PORT"))
     async with serve(handler, "0.0.0.0", PORT):
-        logger.info(f'WebSocket running at ws://localhost:{PORT}')
+        logger.info(f"WebSocket running at ws://localhost:{PORT}")
         await asyncio.Future()
 
 
