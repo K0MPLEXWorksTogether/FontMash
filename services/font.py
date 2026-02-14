@@ -23,7 +23,7 @@ class FontService:
             client = await connect_redis(
                 os.getenv("REDIS_HOST"),
                 os.getenv("REDIS_PASSWORD"),
-                os.getenv("REDIS_PORT")
+                os.getenv("REDIS_PORT"),
             )
             return cls(client, key)
         except RedisConnectionError as conn_err:
