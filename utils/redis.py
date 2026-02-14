@@ -9,10 +9,10 @@ from errors import RedisConnectionError
 from utils.logger import Logger
 
 
-async def connect_redis(host: str, password: str) -> Redis:
+async def connect_redis(host: str, password: str, port: int) -> Redis:
     client: Redis = redis.Redis(
         host=host,
-        port=17664,
+        port=port,
         decode_responses=True,
         username="default",
         password=password,
